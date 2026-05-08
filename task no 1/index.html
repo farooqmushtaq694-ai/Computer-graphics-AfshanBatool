@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Graphics Scene</title>
+</head>
+<body>
+
+<h2>My First Graphics Scene </h2>
+
+<canvas id="scene" width="600" height="400" style="border:2px solid black;"></canvas>
+
+<script>
+    var canvas = document.getElementById("scene");
+    var ctx = canvas.getContext("2d");
+
+    // Sky (background)
+    ctx.fillStyle = "#99ccff"; // light blue
+    ctx.fillRect(0, 0, 600, 300);
+
+    // Ground
+    ctx.fillStyle = "#2ecc71"; // green
+    ctx.fillRect(0, 300, 600, 100);
+
+    // Sun (circle)
+    ctx.beginPath();
+    ctx.arc(80, 80, 40, 0, Math.PI * 2);
+    ctx.fillStyle = "orange";
+    ctx.fill();
+
+    // House base (rectangle)
+    ctx.fillStyle = "blue";
+    ctx.fillRect(250, 220, 120, 80);
+
+    // Roof (triangle)
+    ctx.beginPath();
+    ctx.moveTo(250, 220);
+    ctx.lineTo(310, 170);
+    ctx.lineTo(370, 220);
+    ctx.closePath();
+    ctx.fillStyle = "red";
+    ctx.fill();
+
+    // Door
+    ctx.fillStyle = "brown";
+    ctx.fillRect(300, 250, 20, 50);
+
+    // Windows
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(265, 235, 20, 20);
+    ctx.fillRect(335, 235, 20, 20);
+
+</script>
+
+</body>
+</html>
