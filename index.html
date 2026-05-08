@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drawing App</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 15px;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            width: 700px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .controls {
+            margin-bottom: 10px;
+        }
+
+        .controls label {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        input[type="color"] {
+            border: none;
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        input[type="range"] {
+            cursor: pointer;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            background: #ff4d4d;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #cc0000;
+        }
+
+        canvas {
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: crosshair;
+            background: #fff;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2>🎨 Interactive Drawing App</h2>
+
+<div class="container">
+
+    <div class="controls">
+        <label>Color:</label>
+        <input type="color" id="colorPicker" value="#000000">
+
+        <label>Brush Size:</label>
+        <input type="range" id="brushSize" min="1" max="20" value="5">
+
+        <button onclick="clearCanvas()">Clear</button>
+    </div>
+
+    <canvas id="canvas" width="650" height="400"></canvas>
+
+</div>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let drawing = false;
+    let color = document.getElementById("colorPicker").value;
+    let size = document.getElementById("brushSize").value;
+
+    // Update color
+    document.getElementById("colorPicker").addEventListener("input", function() {
+        color = this.value;
+    });
+
+    // Update brush size
+    document.getElementById("brushSize").addEventListener("input", function() {
+        size = this.value;
+    });
+
+    // Start drawing
+    canvas.addEventListener("mousedown", (e) => {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    // Draw
+    canvas.addEventListener("mousemove", (e) => {
+        if (!drawing) return;
+
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = size;
+        ctx.lineCap = "round";
+        ctx.stroke();
+    });
+
+    // Stop drawing
+    canvas.addEventListener("mouseup", () => drawing = false);
+    canvas.addEventListener("mouseleave", () => drawing = false);
+
+    // Clear canvas
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+</script>
+
+</body>
+</html>
