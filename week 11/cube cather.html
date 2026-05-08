@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cube Catcher Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #scoreBoard {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            border: 2px solid black;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cube Catcher Game</h1>
+
+<div id="scoreBoard">
+    Score: <span id="scoreVal">0</span>
+</div>
+
+<canvas id="gameCanvas" width="600" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("scoreVal");
+
+let score = 0;
+
+// Player
+const player = { x: 225, y: 175, size: 40, color: "red", speed: 5 };
+
+// Targets
+let targets = [];
+const keys = {};
+
+// Keyboard input
+window.addEventListener("keydown", e => keys[e.key] = true);
+window.addEventListener("keyup", e => keys[e.key] = false);
+
+// Mouse click (catch cube)
+canvas.addEventListener("mousedown", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    targets = targets.filter(t => {
+        const clicked =
+            mouseX > t.x && mouseX < t.x + t.size &&
+            mouseY > t.y && mouseY < t.y + t.size;
+
+        if (clicked) {
+            score += 10;
+            scoreEl.innerText = score;
+            return false;
+        }
+        return true;
+    });
+});
+
+// Spawn targets
+function spawnTarget() {
+    if (targets.length < 5) {
+        targets.push({
+            x: Math.random() * (canvas.width - 30),
+            y: Math.random() * (canvas.height - 30),
+            size: 30,
+            color: "blue"
+        });
+    }
+}
+
+setInterval(spawnTarget, 2000);
+
+function update() {
+    if (keys["ArrowUp"] || keys["w"]) player.y -= player.speed;
+    if (keys["ArrowDown"] || keys["s"]) player.y += player.speed;
+    if (keys["ArrowLeft"] || keys["a"]) player.x -= player.speed;
+    if (keys["ArrowRight"] || keys["d"]) player.x += player.speed;
+
+    // Boundary check
+    player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+    player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw targets
+    targets.forEach(t => {
+        ctx.fillStyle = t.color;
+        ctx.fillRect(t.x, t.y, t.size, t.size);
+    });
+
+    // Draw player
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.size, player.size);
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+
+</body>
+</html>
