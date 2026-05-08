@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2D Graphics and Rendering</title>
+
+    <style>
+        body{
+            background:#fff0f5;
+            text-align:center;
+            font-family:Arial, sans-serif;
+        }
+
+        h2{
+            color:#d63384;
+        }
+
+        canvas{
+            border:3px solid #ff69b4;
+            background:#ffe4ec;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Move the Object with Keyboard</h2>
+
+<canvas id="gameCanvas" width="600" height="400"></canvas>
+
+<script>
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Player Data
+const player = {
+    x: 275,
+    y: 175,
+    size: 50,
+    color: "pink",
+    speed: 5
+};
+
+// Key Press Interaction
+const keys = {};
+
+window.addEventListener("keydown", (e) => {
+    keys[e.key] = true;
+});
+
+window.addEventListener("keyup", (e) => {
+    keys[e.key] = false;
+});
+
+// Update Player Position
+function update() {
+
+    if (keys["ArrowUp"] || keys["w"]) {
+        player.y -= player.speed;
+    }
+
+    if (keys["ArrowDown"] || keys["s"]) {
+        player.y += player.speed;
+    }
+
+    if (keys["ArrowLeft"] || keys["a"]) {
+        player.x -= player.speed;
+    }
+
+    if (keys["ArrowRight"] || keys["d"]) {
+        player.x += player.speed;
+    }
+}
+
+// Render Graphics
+function render() {
+
+    // Clear Canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Background Circle
+    ctx.beginPath();
+    ctx.arc(100, 100, 40, 0, Math.PI * 2);
+    ctx.fillStyle = "lightblue";
+    ctx.fill();
+
+    // Green Rectangle
+    ctx.fillStyle = "lightgreen";
+    ctx.fillRect(450, 80, 80, 80);
+
+    // Purple Triangle
+    ctx.beginPath();
+    ctx.moveTo(300, 50);
+    ctx.lineTo(350, 150);
+    ctx.lineTo(250, 150);
+    ctx.closePath();
+    ctx.fillStyle = "plum";
+    ctx.fill();
+
+    // Draw Player
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, player.size, player.size);
+
+    update();
+
+    requestAnimationFrame(render);
+}
+
+render();
+
+</script>
+
+</body>
+</html>
